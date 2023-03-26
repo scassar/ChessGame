@@ -30,9 +30,17 @@ class Game():
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
 
+    def flipColor(self, color):
+        WHITE = (240,240,240)
+        BLACK = (30,30,30)
+        if not color or color == WHITE:
+            color = BLACK
+        else:
+            color = WHITE
+        return color
 
     def draw(self):
-        self.drawGrid()
+        self.drawBoard()
 
         # Draw the pieces on the screen.
 
@@ -40,14 +48,24 @@ class Game():
         pygame.display.flip()
 
 
-    def drawGrid(self):
+    def drawBoard(self):
         blockSize = 90 #Set the size of the grid block
+        color = WHITE
 
         for x in range(0, WIDTH, blockSize):
+            color = self.flipColor(color)
+
+            #Draw the colour square
+
             for y in range(0, HEIGHT, blockSize):
                 #Now we alternate the colours of the blocks
-                    rect = pygame.Rect(x, y, blockSize, blockSize)
-                    pygame.draw.rect(self.screen, (0,0,0), rect, 1)
+                    color = self.flipColor(color)
+
+                    rect = pygame.Rect(x, y, x+blockSize, y+blockSize)
+                    #Set the last param of 0 to 1 if you want it to be lines only.
+                    pygame.draw.rect(self.screen, color, rect, 0)
+
+
 
     #Code to setup all the pieces for the board
     def newGame(self):
@@ -84,14 +102,10 @@ class Game():
 
         #8 list of black pawns
         for i in range(8):
-
             self.bpawns.append(Piece(BLACK, 60, 60, 16-i, PiecesList.BPAWN, self))
         #8 White pawns
         for i in range(8):
-
             self.wpawns.append(Piece(WHITE, 60, 60, 56-i, PiecesList.WPAWN, self))
-
-
 
         self.running()
 
