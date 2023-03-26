@@ -1,0 +1,20 @@
+        #Back row black
+
+        self.brookOne = Piece(BLACK, 60, 60,1,PiecesList.BROOK,self)
+        self.brookTwo = Piece(BLACK, 60, 60,8,PiecesList.BROOK,self)
+        self.bknightOne = Piece(BLACK, 60, 60,2,PiecesList.BKNIGHT,self)
+        self.bknightTwo = Piece(BLACK, 60, 60,7,PiecesList.BKNIGHT,self)
+        self.bbishopOne = Piece(BLACK, 60, 60,3,PiecesList.BBISHOP,self)
+        self.bbishopTwo = Piece(BLACK, 60, 60,6,PiecesList.BBISHOP,self)
+        self.bqueen = Piece(BLACK, 60, 60, 4, PiecesList.BQUEEN, self)
+        self.bking = Piece(BLACK, 60, 60, 5, PiecesList.BKING, self)
+
+        #Back row white
+        self.brookOne = Piece(WHITE, 60, 60,64,PiecesList.WROOK,self)
+        self.brookTwo = Piece(WHITE, 60, 60,57,PiecesList.WROOK,self)
+        self.bknightOne = Piece(WHITE, 60, 60,63,PiecesList.WKNIGHT,self)
+        self.bknightTwo = Piece(WHITE, 60, 60,58,PiecesList.WKNIGHT,self)
+        self.bbishopOne = Piece(WHITE, 60, 60,62,PiecesList.WBISHOP,self)
+        self.bbishopTwo = Piece(WHITE, 60, 60,59,PiecesList.WBISHOP,self)
+        self.bqueen = Piece(WHITE, 60, 60, 61, PiecesList.WQUEEN, self)
+        self.bking = Piece(WHITE, 60, 60, 60, PiecesList.WKING, self)
