@@ -34,8 +34,7 @@ class Game():
     def draw(self):
         self.drawGrid()
 
-        # Draw the player on the screen.
-        #screen.blit(rook.image, (WIDTH / 2, HEIGHT / 2))
+        # Draw the pieces on the screen.
 
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
