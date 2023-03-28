@@ -3,19 +3,19 @@
 # Import and initialize the pygame library
 import pygame
 from settings import *
-from Sprites.sprites import *
+from Sprites.pieces import *
 
 #Manage the overall game state. IF we dont use this we have to define everything as global which isnt as nice.
 
 class PiecesList(Enum):
     BPAWN = "bP.svg"
-    BKNIGHT = "bK.svg"
+    BKNIGHT = "bN.svg"
     BROOK = "bR.svg"
     BBISHOP = "bB.svg"
     BQUEEN = "bQ.svg"
     BKING = "bK.svg"
     WPAWN = "wP.svg"
-    WKNIGHT = "wK.svg"
+    WKNIGHT = "wN.svg"
     WROOK = "wR.svg"
     WBISHOP = "wB.svg"
     WQUEEN = "wQ.svg"
@@ -26,7 +26,7 @@ class Game():
     def __init__(self):
         # initialise the module
         pygame.init()
-        pygame.display.set_caption("Shauns Chess Lair")
+        pygame.display.set_caption(GAMENAME)
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
 
@@ -49,6 +49,7 @@ class Game():
 
 
     def drawBoard(self):
+
         blockSize = 90 #Set the size of the grid block
         color = WHITE
 
@@ -76,36 +77,51 @@ class Game():
         self.whitepieces = []
         self.blackpieces = []
 
+        #representation of the current board
+        self.board = [
+			['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+			['b ', 'b ', 'b ', 'b ', 'b ', 'b ', 'b ', 'b '],
+			['','','','','','','',''],
+			['','','','','','','',''],
+			['','','','','','','',''],
+			['','','','','','','',''],
+			['w ', 'w ', 'w ', 'w ', 'w ', 'w ', 'w ', 'w '],
+			['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
+		]
+
+
+
+
         #set up all pieces
         #we need an array that has a piece type, and a tile
 
-        #Back row black
+        #White row
 
-        self.blackpieces.append(Piece(BLACK, 60, 60,1,PiecesList.BROOK,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60,8,PiecesList.BROOK,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60,2,PiecesList.BKNIGHT,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60,7,PiecesList.BKNIGHT,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60,3,PiecesList.BBISHOP,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60,6,PiecesList.BBISHOP,self))
-        self.blackpieces.append(Piece(BLACK, 60, 60, 4, PiecesList.BQUEEN, self))
-        self.blackpieces.append(Piece(BLACK, 60, 60, 5, PiecesList.BKING, self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,1,PiecesList.WROOK,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,8,PiecesList.WROOK,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,2,PiecesList.WKNIGHT,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,7,PiecesList.WKNIGHT,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,3,PiecesList.WBISHOP,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60,6,PiecesList.WBISHOP,self))
+        self.whitepieces.append(Piece(WHITE, 60, 60, 5, PiecesList.WQUEEN, self))
+        self.whitepieces.append(Piece(WHITE, 60, 60, 4, PiecesList.WKING, self))
 
-        #Back row white
-        self.whitepieces.append(Piece(WHITE, 60, 60,64,PiecesList.WROOK,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60,57,PiecesList.WROOK,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60,63,PiecesList.WKNIGHT,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60,58,PiecesList.WKNIGHT,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60,62,PiecesList.WBISHOP,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60,59,PiecesList.WBISHOP,self))
-        self.whitepieces.append(Piece(WHITE, 60, 60, 61, PiecesList.WQUEEN, self))
-        self.whitepieces.append(Piece(WHITE, 60, 60, 60, PiecesList.WKING, self))
+        #Black row
+        self.blackpieces.append(Piece(BLACK, 60, 60,64,PiecesList.BROOK,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60,57,PiecesList.BROOK,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60,63,PiecesList.BKNIGHT,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60,58,PiecesList.BKNIGHT,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60,62,PiecesList.BBISHOP,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60,59,PiecesList.BBISHOP,self))
+        self.blackpieces.append(Piece(BLACK, 60, 60, 61, PiecesList.BQUEEN, self))
+        self.blackpieces.append(Piece(BLACK, 60, 60, 60, PiecesList.BKING, self))
 
         #8 list of black pawns
         for i in range(8):
-            self.bpawns.append(Piece(BLACK, 60, 60, 16-i, PiecesList.BPAWN, self))
+            self.wpawns.append(Piece(WHITE, 60, 60, 16-i, PiecesList.WPAWN, self))
         #8 White pawns
         for i in range(8):
-            self.wpawns.append(Piece(WHITE, 60, 60, 56-i, PiecesList.WPAWN, self))
+            self.bpawns.append(Piece(BLACK, 60, 60, 56-i, PiecesList.BPAWN, self))
 
         self.running()
 
@@ -128,6 +144,11 @@ class Game():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("The user clicked the mouse")
+                    print(pygame.mouse.get_pos())
+
+                    #locate the selected sprite
 
             # Fill the background with white
             screen.fill((255, 255, 255))

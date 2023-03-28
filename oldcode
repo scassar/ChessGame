@@ -18,3 +18,18 @@
         self.bbishopTwo = Piece(WHITE, 60, 60,59,PiecesList.WBISHOP,self)
         self.bqueen = Piece(WHITE, 60, 60, 61, PiecesList.WQUEEN, self)
         self.bking = Piece(WHITE, 60, 60, 60, PiecesList.WKING, self)
+
+
+
+        #another way to do it to track locations. Can also have another array if you like
+        #to track where each piece lives
+        self.board = [
+            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
+            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['','','','','','','',''],
+            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+        ]

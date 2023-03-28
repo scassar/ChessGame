@@ -2,41 +2,29 @@ import pygame
 import math
 from settings import *
 from enum import Enum
-
 vec = pygame.math.Vector2
 
 #This enum just maps the image files to be used for a given piece on the board
-class PiecesList(Enum):
-    BPAWN = "bP.svg"
-    BKNIGHT = "bK.svg"
-    BROOK = "bR.svg"
-    BBISHOP = "bB.svg"
-    BQUEEN = "bQ.svg"
-    BKING = "bK.svg"
-    WPAWN = "wP.svg"
-    WKNIGHT = "wK.svg"
-    WROOK = "wR.svg"
-    WBISHOP = "wB.svg"
-    WQUEEN = "wQ.svg"
-    WKING = "wK.svg"
 
-# Here we want the code to control the piece. By default it will be part of inheting from pygame Sprite object.
+# Here we want the code to control the piece. By default it will be part of inheting from pygame Sprite object. You
+# want to override the rect, image and update() functions
 class Piece(pygame.sprite.Sprite):
 
     def __init__(self, color, width, height, tile, type, game):
         # Call the parent class (Sprite) constructor
-        pygame.sprite.Sprite.__init__(self)
+
         self.groups = game.all_sprites
         self.layers = 1
         self.game = game
 
+        #Call to the super class init function. What does this do?
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = width
         self.color = color
         self.height = height
         self.tile = tile
-        self.type = type
+        self.type = type     #Value from Enum
 
         self.image = pygame.image.load('Images/'+self.type.value)
         self.image = pygame.transform.scale(self.image, (70,70))
@@ -55,7 +43,10 @@ class Piece(pygame.sprite.Sprite):
 
     def update(self):
         #We will put code here for what happens when the pieces move
-        print("entering update function for sprites")
+        #print("entering update function for sprites")
+        print()
+        #capture mouse event
+
 
     def determineXY(self):
         xrow = self.tile / 8
