@@ -1,10 +1,10 @@
-from Sprites.pieces import *
-from Sprites.rook import *
-from Sprites.knight import *
-from Sprites.bishop import *
-from Sprites.queen import *
-from Sprites.king import *
-from Sprites.pawn import *
+from Classes.pieces import *
+from Classes.rook import *
+from Classes.knight import *
+from Classes.bishop import *
+from Classes.queen import *
+from Classes.king import *
+from Classes.pawn import *
 
 
 #We need to define each square of the board. It must have all the properties of the location, along with

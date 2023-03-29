@@ -10,39 +10,26 @@ vec = pygame.math.Vector2
 # want to override the rect, image and update() functions
 class Piece(pygame.sprite.Sprite):
 
-    def __init__(self, color, game):
+    def __init__(self, color, x,y, game):
         # Call the parent class (Sprite) constructor
 
         self.groups = game.all_sprites
         self.layers = 1
         self.game = game
         self.color = color
-
+        self.x = x
+        self.y=y
 
         #Call to the super class init function. What does this do?
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.image.load('Images/'+self.type.value)
-        self.image = pygame.transform.scale(self.image, (70,70))
 
-        #Determine the position now
-
-       # self.pos = vec(100,100)
-        # Fetch the rectangle object that has the dimensions of the image
-        # Update the position of this object by setting the values of rect.x and rect.y
-       # self.rect = self.image.get_rect()
-
-        #We just need a way to calculte starting positions based on tile location
-
-       # self.rect.center = (x,y)
 
     def update(self):
-        #We will put code here for what happens when the pieces move
-        #print("entering update function for sprites")
         print()
-        #capture mouse event
 
 
+   # No longer needed in the new method
     def determineXY(self):
         xrow = self.tile / 8
         xtile = self.tile % 8

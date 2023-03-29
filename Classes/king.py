@@ -1,18 +1,9 @@
-from Sprites.pieces import *
+from Classes.pieces import *
 
 class King(Piece):
 
     def __init__(self, color, x, y, game):
-
-        self.groups = game.all_sprites
-        self.layers = 1
-        self.game = game
-        self.color = color
-        self.x = x
-        self.y = y
-
-        #add sprite to the game all_sprites group
-        pygame.sprite.Sprite.__init__(self, self.groups)
+        super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'K.svg')
         self.image = pygame.transform.scale(self.image, (240,240))
@@ -22,4 +13,7 @@ class King(Piece):
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
+
+    def update(self):
+        print()
 

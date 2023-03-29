@@ -1,20 +1,11 @@
-from Sprites.pieces import *
+from Classes.pieces import *
 
-class Knight(Piece):
+class Queen(Piece):
 
     def __init__(self, color, x, y, game):
+        super().__init__(color, x, y, game)
 
-        self.groups = game.all_sprites
-        self.layers = 1
-        self.game = game
-        self.color = color
-        self.x = x
-        self.y = y
-
-        #add sprite to the game all_sprites group
-        pygame.sprite.Sprite.__init__(self, self.groups)
-
-        self.image = pygame.image.load('Images/'+self.color+'N.svg')
+        self.image = pygame.image.load('Images/'+self.color+'Q.svg')
         self.image = pygame.transform.scale(self.image, (240,240))
 
         #Determine the position now
@@ -23,3 +14,5 @@ class Knight(Piece):
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
 
+    def update(self):
+        print()

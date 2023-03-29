@@ -1,17 +1,9 @@
 # Simple pygame program
 
 # Import and initialize the pygame library
-from Sprites.square import *
+from Classes.square import *
 
 #Manage the overall game state. IF we dont use this we have to define everything as global which isnt as nice.
-
-class PiecesList(Enum):
-    PAWN = "P"
-    KNIGHT = "N"
-    ROOK = "R"
-    BISHOP = "B"
-    QUEEN = "Q"
-    KING = "K"
 
 class Game():
 
@@ -24,6 +16,30 @@ class Game():
 
         # This is the code as the entry point to start a new game.
 
+    def newGame(self):
+
+        self.all_sprites = pygame.sprite.LayeredUpdates()
+
+        # representation of the current board / board start
+        self.board = [
+            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
+        ]
+
+        self.squaregrid = [[], [], [], [], [], [], [], []]
+
+        self.createBoard()
+        self.createPieces()
+
+        self.running()
+
+
     def createBoard(self):
         # Create all the square objects first
         blockSize = 90
@@ -35,7 +51,6 @@ class Game():
             color = self.flipColor(color)
             row = 0
             column = column + 1
-            print(self.squaregrid)
 
             for y in range(0, HEIGHT, blockSize):  # y coordinate
                 # Now we alternate the colours of the blocks
@@ -57,35 +72,9 @@ class Game():
                 attributes = self.determinePiece(board_value)
                 colour = attributes[0]
                 piece_code = attributes[1]
-                print(x, y)
 
                 if piece_code != '--':
                     self.squaregrid[x][y].addPiece(self,colour,piece_code)
-                    print("made a piece!" + piece_code)
-
-
-    def newGame(self):
-
-        self.all_sprites = pygame.sprite.LayeredUpdates()
-
-        # representation of the current board / board start
-        self.board = [
-            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
-            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
-        ]
-
-        self.squaregrid = [[],[],[],[],[],[],[],[] ]
-
-        self.createBoard()
-        self.createPieces()
-
-        self.running()
 
     def determinePiece(self,piece):
         #This function will return back what piece object based on the letters in the board array for setup
@@ -108,7 +97,6 @@ class Game():
         for x in range(8):
             for y in range(8):
                 self.squaregrid[x][y].drawSquare(self.screen)
-
 
     def flipColor(self, color):
         WHITE = (240,240,240)
