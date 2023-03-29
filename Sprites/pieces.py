@@ -10,36 +10,31 @@ vec = pygame.math.Vector2
 # want to override the rect, image and update() functions
 class Piece(pygame.sprite.Sprite):
 
-    def __init__(self, color, width, height, tile, type, game):
+    def __init__(self, color, game):
         # Call the parent class (Sprite) constructor
 
         self.groups = game.all_sprites
         self.layers = 1
         self.game = game
+        self.color = color
+
 
         #Call to the super class init function. What does this do?
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = width
-        self.color = color
-        self.height = height
-        self.tile = tile
-        self.type = type     #Value from Enum
-
         self.image = pygame.image.load('Images/'+self.type.value)
         self.image = pygame.transform.scale(self.image, (70,70))
-        #print('Images/'+self.type.value)
 
         #Determine the position now
 
-        self.pos = vec(100,100)
+       # self.pos = vec(100,100)
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
-        self.rect = self.image.get_rect()
+       # self.rect = self.image.get_rect()
 
         #We just need a way to calculte starting positions based on tile location
 
-        self.rect.center = self.determineXY()
+       # self.rect.center = (x,y)
 
     def update(self):
         #We will put code here for what happens when the pieces move
