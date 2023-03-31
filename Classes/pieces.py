@@ -19,14 +19,18 @@ class Piece(pygame.sprite.Sprite):
         self.color = color
         self.x = x
         self.y=y
+        self.pos = vec()
 
         #Call to the super class init function. What does this do?
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-
-
     def update(self):
         print()
+
+
+
+    def returnSelected(self,x,y):
+        return
 
 
    # No longer needed in the new method

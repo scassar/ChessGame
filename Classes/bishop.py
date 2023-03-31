@@ -14,3 +14,33 @@ class Bishop(Piece):
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
 
+    #return array of legal moves
+    def legalMoves(self,game,fromSquare,toSquare):
+
+        print("we are checking moves for a Bishop")
+        legalMoves = []
+        # We need to calculate the movement for the bishop
+
+        for i in range(1, 8):
+            if fromSquare.row + i > 7 or fromSquare.column - i < 0:
+                break
+            legalMoves.append([fromSquare.row + i, fromSquare.column - i])
+
+        for i in range(1, 8):
+            if fromSquare.row + i > 7 or fromSquare.column + i > 7:
+                break
+            legalMoves.append([fromSquare.row + i, fromSquare.column + i])
+
+        for i in range(1, 8):
+            if fromSquare.row - i < 0 or fromSquare.column + i > 7:
+                break
+            legalMoves.append([fromSquare.row - i, fromSquare.column + i])
+
+        for i in range(1, 8):
+            if fromSquare.row - i < 0 or fromSquare.column - i < 0:
+                break
+            legalMoves.append([fromSquare.row - i, fromSquare.column - i])
+
+        return legalMoves
+
+

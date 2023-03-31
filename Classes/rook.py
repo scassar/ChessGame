@@ -17,3 +17,39 @@ class Rook(Piece):
 
     def update(self):
         print()
+
+    def legalMoves(self,game,fromSquare,toSquare):
+
+        legalMoves = []
+
+
+        for y in range(fromSquare.row):
+            legalMoves.append([y, fromSquare.column])
+
+        #move south
+
+        for y in range(fromSquare.row + 1, 8):
+            legalMoves.append([y, fromSquare.column])
+
+        #move east
+
+        for x in range(fromSquare.column + 1, 8):
+            legalMoves.append([fromSquare.row, x])
+
+        #move west
+
+        for y in range(fromSquare.column):
+            legalMoves.append([fromSquare.row, y])
+
+
+
+        return legalMoves
+
+
+
+
+
+
+
+
+

@@ -18,3 +18,30 @@ class Knight(Piece):
 
     def update(self):
         print()
+
+
+    def legalMoves(self,game,fromSquare,toSquare):
+        legalMoves = []
+
+        moves = [
+            (1, -2),
+            (2, -1),
+            (2, 1),
+            (1, 2),
+            (-1, 2),
+            (-2, 1),
+            (-2, -1),
+            (-1, -2)
+        ]
+
+        for move in moves:
+            new_pos = [fromSquare.row + move[0], fromSquare.column + move[1]]
+            if (
+                    new_pos[0] < 8 and
+                    new_pos[0] >= 0 and
+                    new_pos[1] < 8 and
+                    new_pos[1] >= 0
+            ):
+                legalMoves.append(new_pos)
+
+        return legalMoves

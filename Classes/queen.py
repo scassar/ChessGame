@@ -16,3 +16,50 @@ class Queen(Piece):
 
     def update(self):
         print()
+
+    def legalMoves(self,game,fromSquare,toSquare):
+
+        print("we are checking moves for a Queen")
+        legalMoves = []
+        # We need to calculate the movement for the bishop
+
+        for i in range(1, 8):
+            if fromSquare.row + i > 7 or fromSquare.column - i < 0:
+                break
+            legalMoves.append([fromSquare.row + i, fromSquare.column - i])
+
+        for i in range(1, 8):
+            if fromSquare.row + i > 7 or fromSquare.column + i > 7:
+                break
+            legalMoves.append([fromSquare.row + i, fromSquare.column + i])
+
+        for i in range(1, 8):
+            if fromSquare.row - i < 0 or fromSquare.column + i > 7:
+                break
+            legalMoves.append([fromSquare.row - i, fromSquare.column + i])
+
+        for i in range(1, 8):
+            if fromSquare.row - i < 0 or fromSquare.column - i < 0:
+                break
+            legalMoves.append([fromSquare.row - i, fromSquare.column - i])
+
+        for y in range(fromSquare.row):
+            legalMoves.append([y, fromSquare.column])
+
+            # move south
+
+        for y in range(fromSquare.row + 1, 8):
+            legalMoves.append([y, fromSquare.column])
+
+            # move east
+
+        for x in range(fromSquare.column + 1, 8):
+            legalMoves.append([fromSquare.row, x])
+
+            # move west
+
+        for y in range(fromSquare.column):
+            legalMoves.append([fromSquare.row, y])
+
+
+        return legalMoves

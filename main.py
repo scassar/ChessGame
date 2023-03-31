@@ -13,13 +13,16 @@ class Game():
         pygame.display.set_caption(GAMENAME)
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+        self.selected_piece = None
+        self.selected_square = None
+
 
         # This is the code as the entry point to start a new game.
 
-    def newGame(self):
+    def new_game(self):
 
         self.all_sprites = pygame.sprite.LayeredUpdates()
-
+        self.turn = 'w'
         # representation of the current board / board start
         self.board = [
             ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
@@ -34,13 +37,18 @@ class Game():
 
         self.squaregrid = [[], [], [], [], [], [], [], []]
 
-        self.createBoard()
-        self.createPieces()
+        self.create_board()
+        self.create_pieces()
 
         self.running()
 
+    def toggle_turn(self):
+        if self.turn == 'w':
+            self.turn = 'b'
+        else:
+            self.turn = 'w'
 
-    def createBoard(self):
+    def create_board(self):
         # Create all the square objects first
         blockSize = 90
         color = WHITE
@@ -48,13 +56,13 @@ class Game():
         column = 0
 
         for x in range(0, WIDTH, blockSize):  # x coordinate
-            color = self.flipColor(color)
+            color = self.flip_color(color)
             row = 0
             column = column + 1
 
             for y in range(0, HEIGHT, blockSize):  # y coordinate
                 # Now we alternate the colours of the blocks
-                color = self.flipColor(color)
+                color = self.flip_color(color)
 
                 # Create the first square object in a 2d list
                 # Also add in the occupying piece for the start
@@ -62,21 +70,21 @@ class Game():
                 self.squaregrid[column - 1].append(Square(x, y, color, blockSize, row, column - 1, ''))
                 row = row + 1
 
-    def createPieces(self):
+    def create_pieces(self):
         #Now we add each piece to the board squares.
 
         for x in range(8):
             for y in range(8):
 
                 board_value = self.board[x][y]
-                attributes = self.determinePiece(board_value)
+                attributes = self.determine_piece(board_value)
                 colour = attributes[0]
                 piece_code = attributes[1]
 
                 if piece_code != '--':
                     self.squaregrid[x][y].addPiece(self,colour,piece_code)
 
-    def determinePiece(self,piece):
+    def determine_piece(self, piece):
         #This function will return back what piece object based on the letters in the board array for setup
 
         values = piece.split()
@@ -90,7 +98,7 @@ class Game():
             return [color,occupying_piece]
 
     #Once we have the initial list of squares, now we can loop and draw them all
-    def drawBoard(self):
+    def draw_board(self):
 
         blockSize = 90 #Set the size of the grid block
 
@@ -98,7 +106,8 @@ class Game():
             for y in range(8):
                 self.squaregrid[x][y].drawSquare(self.screen)
 
-    def flipColor(self, color):
+    def flip_color(self, color):
+
         WHITE = (240,240,240)
         BLACK = (30,30,30)
         if not color or color == WHITE:
@@ -108,16 +117,100 @@ class Game():
         return color
 
     def draw(self):
-        self.drawBoard()
+        self.draw_board()
 
         # Draw the pieces on the screen.
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
 
-
     def update(self):
         #self.all_sprites.update()
         return
+
+    #Function returns the square object we have clicked on
+    def locate_square(self,pos):
+        for i in range(8):
+            for z in range(8):
+                if (self.squaregrid[i][z].rect.collidepoint(pos)):
+                        return self.squaregrid[i][z]
+
+    #This must return an array of square objects that are legal objects to move
+    def find_legal_moves(self, fromSquare, toSquare):
+
+        legal_moves = fromSquare.occupying_piece.legalMoves(self,fromSquare,toSquare)
+
+        print(f'the legal moves are  {legal_moves}')
+        return legal_moves #Array list of row,columns that can be used
+
+
+    def highlight_squares(self,highlight_list):
+        for x in highlight_list:
+            row = x[0]
+            column = x[1]
+            if self.squaregrid[row][column].highlighted:
+                self.squaregrid[row][column].highlighted = False
+            else:
+                self.squaregrid[row][column].highlighted = True
+
+
+    def handle_click(self,pos):
+        clicked_square = self.locate_square(pos)
+
+        if (clicked_square.occupying_piece == '' and self.selected_piece is None):
+            print("Not a selectable square")
+            return
+
+        #For later, the move function should be attached to a piece object.
+
+        #Enter this loop when selecting a piece. Select the square and piece we want to target first.
+        if self.selected_piece is None:
+            if (clicked_square.occupying_piece != '' and clicked_square.occupying_piece.color == self.turn):
+                self.selected_piece = clicked_square.occupying_piece
+                self.selected_square = clicked_square
+
+                highlight_moves = self.find_legal_moves(self.selected_square, clicked_square)
+                #update all squares in highlight_moves array
+
+                self.highlight_squares(highlight_moves)
+
+        else:
+
+            #Legal moves will return the row/column that our selected piece can move to as a piece with logic
+
+            legal_moves = self.find_legal_moves(self.selected_square, clicked_square)
+            highlight_moves = legal_moves
+
+            if len(legal_moves) == 0:
+                self.selected_piece = None
+                self.selected_square = None
+
+            #Check if the square is available for clicking
+            #print(self.selected_piece)
+            for square_options in legal_moves:
+
+                if square_options[0] == clicked_square.row and square_options[1] == clicked_square.column:
+
+                    if (clicked_square.occupying_piece != '' and self.selected_square != clicked_square):
+                        clicked_square.occupying_piece.kill()
+                        print("killing")
+
+                #Check for legal move. What we need to know here is the from square, peice and target square
+
+                #Set the new square = to the selected square and update the piece.
+
+                    print(self.selected_piece)
+                    print(clicked_square.occupying_piece)
+
+                    clicked_square.occupying_piece = self.selected_piece
+                    self.selected_piece.rect.center = (clicked_square.centerx, clicked_square.centery)
+                    self.selected_square.occupying_piece = ''
+
+                    #No more piece is selected
+                    self.selected_piece = None
+                    self.selected_square = None
+                    self.toggle_turn()
+
+                    self.highlight_squares(highlight_moves)
 
 
     def running(self):
@@ -130,15 +223,14 @@ class Game():
         running = True
         while running:
 
+            self.clock.tick(60)
+            pos = pygame.mouse.get_pos()
             # Did the user click the window close button?
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print("The user clicked the mouse")
-                    print(pygame.mouse.get_pos())
-
-                    #locate the selected sprite
+                    self.handle_click(pos)
 
             # Fill the background with white
             screen.fill((255, 255, 255))
@@ -159,4 +251,4 @@ class Game():
 #Here we start the game
 
 game = Game()
-game.newGame()
+game.new_game()
