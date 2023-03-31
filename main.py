@@ -187,19 +187,15 @@ class Game():
             #Check if the square is available for clicking
             #print(self.selected_piece)
             for square_options in legal_moves:
-
                 if square_options[0] == clicked_square.row and square_options[1] == clicked_square.column:
 
                     if (clicked_square.occupying_piece != '' and self.selected_square != clicked_square):
-                        clicked_square.occupying_piece.kill()
-                        print("killing")
+                        clicked_square.occupying_piece.rect.center = (-100,-100)
+                        print("removing object and moving it off the board")
 
                 #Check for legal move. What we need to know here is the from square, peice and target square
 
                 #Set the new square = to the selected square and update the piece.
-
-                    print(self.selected_piece)
-                    print(clicked_square.occupying_piece)
 
                     clicked_square.occupying_piece = self.selected_piece
                     self.selected_piece.rect.center = (clicked_square.centerx, clicked_square.centery)
@@ -209,7 +205,6 @@ class Game():
                     self.selected_piece = None
                     self.selected_square = None
                     self.toggle_turn()
-
                     self.highlight_squares(highlight_moves)
 
 
