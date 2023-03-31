@@ -21,12 +21,25 @@ class King(Piece):
         print("we are checking moves for a King")
         legalMoves = []
 
-        if self.color == 'w':
-            if (abs(toSquare.row - fromSquare.row) < 2 and abs(toSquare.column - fromSquare.column) < 2) and ((toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'b') or toSquare.occupying_piece == ''):
-                legalMoves.append([toSquare.row, toSquare.column])
+        moves = [
+            (0, -1),  # north
+            (1, -1),  # ne
+            (1, 0),  # east
+            (1, 1),  # se
+            (0, 1),  # south
+            (-1, 1),  # sw
+            (-1, 0),  # west
+            (-1, -1),  # nw
+        ]
 
-        if self.color == 'b':
-            if (abs(toSquare.row - fromSquare.row) < 2 and abs(toSquare.column - fromSquare.column) < 2) and ((toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'w') or toSquare.occupying_piece == ''):
-                legalMoves.append([toSquare.row, toSquare.column])
+        for move in moves:
+            new_pos = [fromSquare.row + move[0], fromSquare.column + move[1]]
+            if (
+                    new_pos[0] < 8 and
+                    new_pos[0] >= 0 and
+                    new_pos[1] < 8 and
+                    new_pos[1] >= 0
+            ):
+                legalMoves.append(new_pos)
 
         return legalMoves

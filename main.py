@@ -117,6 +117,7 @@ class Game():
         return color
 
     def draw(self):
+
         self.draw_board()
 
         # Draw the pieces on the screen.
@@ -178,6 +179,7 @@ class Game():
             #Legal moves will return the row/column that our selected piece can move to as a piece with logic
 
             legal_moves = self.find_legal_moves(self.selected_square, clicked_square)
+
             highlight_moves = legal_moves
 
             if len(legal_moves) == 0:
