@@ -153,6 +153,12 @@ class Game():
             else:
                 self.squaregrid[row][column].highlighted = True
 
+    def find_illegal_moves(self, legal_moves, clicked_square):
+        #Here we will return a list of edited legal moves
+
+
+        return
+
 
     def handle_click(self,pos):
         clicked_square = self.locate_square(pos)
@@ -169,10 +175,12 @@ class Game():
                 self.selected_piece = clicked_square.occupying_piece
                 self.selected_square = clicked_square
 
-                highlight_moves = self.find_legal_moves(self.selected_square, clicked_square)
+                #highlight_moves = self.find_legal_moves(self.selected_square, clicked_square)
+
+                #print(f'The highlight squares are {highlight_moves}')
                 #update all squares in highlight_moves array
 
-                self.highlight_squares(highlight_moves)
+                #self.highlight_squares(highlight_moves)
 
         else:
 
@@ -180,14 +188,15 @@ class Game():
 
             legal_moves = self.find_legal_moves(self.selected_square, clicked_square)
 
-            highlight_moves = legal_moves
+            #highlight_moves = legal_moves
+
+            illegal_moves = self.find_illegal_moves(legal_moves, clicked_square)
 
             if len(legal_moves) == 0:
                 self.selected_piece = None
                 self.selected_square = None
 
-            #Check if the square is available for clicking
-            #print(self.selected_piece)
+            #This is where we make the actual moves. we want to reduce the list of legal moves first
             for square_options in legal_moves:
                 if square_options[0] == clicked_square.row and square_options[1] == clicked_square.column:
 
@@ -207,8 +216,7 @@ class Game():
                     self.selected_piece = None
                     self.selected_square = None
                     self.toggle_turn()
-                    self.highlight_squares(highlight_moves)
-
+                    #self.highlight_squares(highlight_moves)
 
     def running(self):
 

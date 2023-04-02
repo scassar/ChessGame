@@ -32,8 +32,7 @@ class Square():
         self.row = row
         self.column = column
         self.occupying_piece = ""
-        self.highlighted=False
-
+        self.highlighted = False
 
         #Create the actual rect object that gets drawn. This is x,y,width and height
         self.rect = pygame.Rect(x, y, blocksize, blocksize)

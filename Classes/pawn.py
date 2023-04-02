@@ -21,19 +21,25 @@ class Pawn(Piece):
     def legalMoves(self,game,fromSquare,toSquare):
 
         legalMoves = []
-        if self.color == 'w':
-            legalMoves.append([fromSquare.row - 1, fromSquare.column])
 
-            if (fromSquare.row == 6):
+        if self.color == 'w':
+
+            if (toSquare.occupying_piece == ''):
+                legalMoves.append([fromSquare.row - 1, fromSquare.column])
+
+            if (fromSquare.row == 6 and toSquare.occupying_piece == ''):
                 legalMoves.append([fromSquare.row - 2, fromSquare.column])
+                print('move added 2')
 
             if toSquare.row == fromSquare.row - 1 and abs(
                     toSquare.column - fromSquare.column) == 1 and toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'b':
                 legalMoves.append([toSquare.row, toSquare.column])
-        else:
-            legalMoves.append([fromSquare.row + 1, fromSquare.column])
 
-            if (fromSquare.row == 1):
+        else:
+            if (toSquare.occupying_piece == ''):
+                legalMoves.append([fromSquare.row + 1, fromSquare.column])
+
+            if (fromSquare.row == 1 and toSquare.occupying_piece == ''):
                 legalMoves.append([fromSquare.row + 2, fromSquare.column])
 
             if toSquare.row == fromSquare.row + 1 and abs(
