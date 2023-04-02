@@ -8,8 +8,8 @@ class Knight(Piece):
 
 
         self.image = pygame.image.load('Images/'+self.color+'N.svg')
-        #self.image = pygame.transform.scale(self.image, (240,240))
-        self.image = pygame.transform.scale(self.image, (70,70))
+        self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (70,70))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image

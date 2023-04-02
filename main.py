@@ -85,10 +85,14 @@ class Game():
 
                 if piece_code != '--':
                     self.squaregrid[x][y].addPiece(self,colour,piece_code)
-                    if colour == 'w':
+                    if colour == 'w' and piece_code == 'K':
                         self.white_king_square = self.squaregrid[x][y]
-                    else:
+                        #print(f'White king is at location {x} {y}')
+                    elif colour == 'b' and piece_code == 'K':
                         self.black_king_square = self.squaregrid[x][y]
+                        #print(f'Black king is at location {x} {y}')
+
+
 
     def determine_piece(self, piece):
         #This function will return back what piece object based on the letters in the board array for setup
@@ -160,14 +164,39 @@ class Game():
                 self.squaregrid[row][column].highlighted = True
 
     def find_illegal_moves(self, piece):
-        #Return if after making a move there is someone who can see the king
+        #Return if after making a move there is someone who can see the king.
+        #Piece passed in is the selected one
+        legal_moves = []
+        legal_moves_temp=[]
 
-        #for squares in self.squaregrid:
-        #    if squares.occupying_piece.color != piece.color: #Get the opposite color
-        #        legal_moves = self.find_legal_moves(self)
+        for x in range(8):
+            for y in range(8):
+                if (self.squaregrid[x][y].occupying_piece != '' and self.squaregrid[x][y].occupying_piece.color != piece.color): #Get the opposite color. We check the square against passed color and want a different value
+                    if piece.color == 'w':
+                        legal_moves_temp = self.squaregrid[x][y].occupying_piece.legalMoves(self, self.squaregrid[x][y], self.white_king_square)  #returna a list
+                        #print(f'Checking illegal moves for {self.squaregrid[x][y].occupying_piece.color},{self.white_king_square.row}, {self.white_king_square.column}')
+                    else:
+                        legal_moves_temp = self.squaregrid[x][y].occupying_piece.legalMoves(self, self.squaregrid[x][y], self.black_king_square)
+                        #print(f'Checking illegal moves for {self.squaregrid[x][y].occupying_piece.color}, {self.black_king_square.row}, {self.black_king_square.column}')
+
+                legal_moves = legal_moves + legal_moves_temp
 
 
-        return
+            #Now we have a list of legal moves that checks if the clicked square is the king. If the kings position is returned then we know we can target the king
+
+        illegal = False
+
+        for move in legal_moves:
+            if piece.color == 'w':
+                if move[0] == self.white_king_square.row and move[1] == self.white_king_square.column:
+                    illegal = True
+
+            else:
+                if move[0] == self.black_king_square.row and move[1] == self.black_king_square.column:
+                    illegal = True
+
+
+        return illegal
 
 
     def handle_click(self,pos):
@@ -215,17 +244,53 @@ class Game():
                         clicked_square.occupying_piece.rect.center = (-100,-100)
                         print("removing object and moving it off the board")
 
+
                 #Check for legal move. What we need to know here is the from square, peice and target square
+                    #update kings locations
 
-                #Set the new square = to the selected square and update the piece.
 
+                    if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece,King):
+                        self.white_king_square = clicked_square
+                        print('update king location')
+                    elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
+                        self.black_king_square = clicked_square
+                        print('update king location')
+
+                    backup_piece = self.selected_square.occupying_piece
+                    backup_square = self.selected_square
+                    backup_clicked_square = clicked_square
+                    backup_clicked_piece = clicked_square.occupying_piece
+
+                    # Set the new square = to the selected square and update the piece.
                     clicked_square.occupying_piece = self.selected_piece
                     self.selected_piece.rect.center = (clicked_square.centerx, clicked_square.centery)
                     self.selected_square.occupying_piece = ''
 
                 #Now check if that move was illegal. Basically return true if someone can now touch the king
                 #Pass the piece that was updated to the new spot (the colour of the turn
-                    illegal = self.find_illegal_moves(clicked_square.occupying_piece)
+
+                    illegal = self.find_illegal_moves(backup_piece)
+
+                    print(f'Is this move illegal? {illegal}')
+
+                    if illegal:  #revert back
+                        print('reverting pieces back')
+                        self.toggle_turn()
+                        clicked_square.occupying_piece = backup_clicked_piece
+                        if clicked_square.occupying_piece != '':
+                            clicked_square.occupying_piece.rect.center = (backup_clicked_square.centerx, backup_clicked_square.centery)
+
+                        self.selected_square.occupying_piece = backup_piece
+                        if self.selected_square.occupying_piece != '':
+                            self.selected_square.occupying_piece.rect.center = (backup_square.centerx, backup_square.centery)
+
+                        #Revet global king position
+                        if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece, King):
+                            self.white_king_square = backup_square
+
+                        elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
+                            self.black_king_square = backup_square
+
 
                 #Revert back if Illegal
 

@@ -6,8 +6,8 @@ class Bishop(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'B.svg')
-        self.image = pygame.transform.scale(self.image, (70,70))
-        #self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (70,70))
+        self.image = pygame.transform.scale(self.image, (240,240))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image
@@ -18,7 +18,7 @@ class Bishop(Piece):
     #return array of legal moves
     def legalMoves(self,game,fromSquare,toSquare):
 
-        print("we are checking moves for a Bishop")
+        #print("we are checking moves for a Bishop")
         legalMoves = []
         # We need to calculate the movement for the bishop
 
@@ -61,7 +61,6 @@ class Bishop(Piece):
                 break
 
         if invalid_move or (toSquare.occupying_piece != '' and toSquare.occupying_piece.color == self.color):
-            print('illegal move')
             legalMoves=[]
 
         return legalMoves

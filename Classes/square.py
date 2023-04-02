@@ -23,10 +23,10 @@ class Square():
         #Windows is blocksize + 45.
         #Eventually need to work out why this is a variance. The mac version makes way more sense.
 
-        self.centery = self.y+blocksize/2
-        #self.centery = self.y+blocksize+45
-        self.centerx = self.x+blocksize/2
-        #self.centerx = self.x+blocksize+45
+        #self.centery = self.y+blocksize/2
+        self.centery = self.y+blocksize+45
+        #self.centerx = self.x+blocksize/2
+        self.centerx = self.x+blocksize+45
         self.color = color
         self.blocksize = blocksize
         self.row = row

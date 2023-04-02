@@ -6,8 +6,8 @@ class Queen(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'Q.svg')
-        #self.image = pygame.transform.scale(self.image, (240,240))
-        self.image = pygame.transform.scale(self.image, (70,70))
+        self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (70,70))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image
@@ -20,7 +20,7 @@ class Queen(Piece):
 
     def legalMoves(self,game,fromSquare,toSquare):
 
-        print("we are checking moves for a Queen")
+        #print("we are checking moves for a Queen")
         legalMoves = []
         # We need to calculate the movement for the bishop
 
@@ -102,7 +102,7 @@ class Queen(Piece):
                 break
 
         if invalid_move or (toSquare.occupying_piece != '' and toSquare.occupying_piece.color == self.color):
-            print('illegal move')
+            #print('illegal move')
             legalMoves = []
 
         return legalMoves

@@ -9,8 +9,8 @@ class Rook(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'R.svg')
-        #self.image = pygame.transform.scale(self.image, (240,240))
-        self.image = pygame.transform.scale(self.image, (70,70))
+        self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (70,70))
 
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
@@ -62,7 +62,7 @@ class Rook(Piece):
             legalMoves.append([fromSquare.row, fromSquare.column-y])
 
 
-        print(legalMoves)
+        #print(legalMoves)
 
         invalid_move = True
         for moves in legalMoves:
@@ -73,7 +73,7 @@ class Rook(Piece):
                 break
 
         if invalid_move or (toSquare.occupying_piece != '' and toSquare.occupying_piece.color == self.color):
-            print('illegal move')
+           # print('illegal move')
             legalMoves=[]
 
 

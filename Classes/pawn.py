@@ -6,8 +6,8 @@ class Pawn(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'P.svg')
-        self.image = pygame.transform.scale(self.image, (70,70))
-       # self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (70,70))
+        self.image = pygame.transform.scale(self.image, (240,240))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image
@@ -29,7 +29,6 @@ class Pawn(Piece):
 
             if (fromSquare.row == 6 and toSquare.occupying_piece == ''):
                 legalMoves.append([fromSquare.row - 2, fromSquare.column])
-                print('move added 2')
 
             if toSquare.row == fromSquare.row - 1 and abs(
                     toSquare.column - fromSquare.column) == 1 and toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'b':
