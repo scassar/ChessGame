@@ -6,7 +6,8 @@ class Queen(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'Q.svg')
-        self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (240,240))
+        self.image = pygame.transform.scale(self.image, (70,70))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image

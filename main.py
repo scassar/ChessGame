@@ -1,5 +1,5 @@
 # Simple pygame program
-
+import pygame
 # Import and initialize the pygame library
 from Classes.square import *
 

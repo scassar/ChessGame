@@ -6,7 +6,8 @@ class Bishop(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'B.svg')
-        self.image = pygame.transform.scale(self.image, (240,240))
+        self.image = pygame.transform.scale(self.image, (70,70))
+        #self.image = pygame.transform.scale(self.image, (240,240))
 
         #Determine the position now
         # Fetch the rectangle object that has the dimensions of the image

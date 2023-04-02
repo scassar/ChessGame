@@ -1,4 +1,5 @@
 from Classes.pieces import *
+import pygame
 
 class Rook(Piece):
 
@@ -8,7 +9,8 @@ class Rook(Piece):
         super().__init__(color, x, y, game)
 
         self.image = pygame.image.load('Images/'+self.color+'R.svg')
-        self.image = pygame.transform.scale(self.image, (240,240))
+        #self.image = pygame.transform.scale(self.image, (240,240))
+        self.image = pygame.transform.scale(self.image, (70,70))
 
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y

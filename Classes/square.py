@@ -6,6 +6,7 @@ from Classes.queen import *
 from Classes.king import *
 from Classes.pawn import *
 from settings import *
+import pygame
 
 
 #We need to define each square of the board. It must have all the properties of the location, along with
@@ -17,8 +18,15 @@ class Square():
     def __init__(self, y, x, color, blocksize,column,row,occupying_piece):
         self.x = x
         self.y = y
-        self.centery = self.y+blocksize+45
-        self.centerx = self.x+blocksize+45
+
+        #Mac version is blocksize / 2
+        #Windows is blocksize + 45.
+        #Eventually need to work out why this is a variance. The mac version makes way more sense.
+
+        self.centery = self.y+blocksize/2
+        #self.centery = self.y+blocksize+45
+        self.centerx = self.x+blocksize/2
+        #self.centerx = self.x+blocksize+45
         self.color = color
         self.blocksize = blocksize
         self.row = row
