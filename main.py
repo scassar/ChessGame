@@ -251,10 +251,10 @@ class Game():
 
                     if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece,King):
                         self.white_king_square = clicked_square
-                        print('update king location')
-                    elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
+                        print('update white king location')
+                    elif self.selected_square.occupying_piece.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                         self.black_king_square = clicked_square
-                        print('update king location')
+                        print('update black king location')
 
                     backup_piece = self.selected_square.occupying_piece
                     backup_square = self.selected_square
