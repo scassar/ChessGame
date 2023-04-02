@@ -15,6 +15,8 @@ class Game():
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
         self.selected_piece = None
         self.selected_square = None
+        self.white_king_square = None
+        self.black_king_square = None
 
 
         # This is the code as the entry point to start a new game.
@@ -83,6 +85,10 @@ class Game():
 
                 if piece_code != '--':
                     self.squaregrid[x][y].addPiece(self,colour,piece_code)
+                    if colour == 'w':
+                        self.white_king_square = self.squaregrid[x][y]
+                    else:
+                        self.black_king_square = self.squaregrid[x][y]
 
     def determine_piece(self, piece):
         #This function will return back what piece object based on the letters in the board array for setup
@@ -153,8 +159,12 @@ class Game():
             else:
                 self.squaregrid[row][column].highlighted = True
 
-    def find_illegal_moves(self, legal_moves, clicked_square):
-        #Here we will return a list of edited legal moves
+    def find_illegal_moves(self, piece):
+        #Return if after making a move there is someone who can see the king
+
+        #for squares in self.squaregrid:
+        #    if squares.occupying_piece.color != piece.color: #Get the opposite color
+        #        legal_moves = self.find_legal_moves(self)
 
 
         return
@@ -190,15 +200,16 @@ class Game():
 
             #highlight_moves = legal_moves
 
-            illegal_moves = self.find_illegal_moves(legal_moves, clicked_square)
-
             if len(legal_moves) == 0:
                 self.selected_piece = None
                 self.selected_square = None
 
             #This is where we make the actual moves. we want to reduce the list of legal moves first
-            for square_options in legal_moves:
-                if square_options[0] == clicked_square.row and square_options[1] == clicked_square.column:
+            for move in legal_moves:
+                if move[0] == clicked_square.row and move[1] == clicked_square.column:
+
+                    #Here we matched a legal move. For this givem move, we need to see if after making it,
+                    #the game would result in a check
 
                     if (clicked_square.occupying_piece != '' and self.selected_square != clicked_square):
                         clicked_square.occupying_piece.rect.center = (-100,-100)
@@ -211,6 +222,12 @@ class Game():
                     clicked_square.occupying_piece = self.selected_piece
                     self.selected_piece.rect.center = (clicked_square.centerx, clicked_square.centery)
                     self.selected_square.occupying_piece = ''
+
+                #Now check if that move was illegal. Basically return true if someone can now touch the king
+                #Pass the piece that was updated to the new spot (the colour of the turn
+                    illegal = self.find_illegal_moves(clicked_square.occupying_piece)
+
+                #Revert back if Illegal
 
                     #No more piece is selected
                     self.selected_piece = None
