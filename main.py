@@ -267,8 +267,6 @@ class Game():
             if square.occupying_piece != '':
                 legal_moves = self.find_legal_moves(king_square, square)
 
-            print(f'checkmate legal moves {legal_moves}')
-
             if len(legal_moves) == 0:
                 checkmate = False
 
@@ -336,10 +334,9 @@ class Game():
 
                     if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece,King):
                         self.white_king_square = clicked_square
-                        print('update white king location')
+
                     elif self.selected_square.occupying_piece.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                         self.black_king_square = clicked_square
-                        print('update black king location')
 
                     backup_piece = self.selected_square.occupying_piece
                     backup_square = self.selected_square
