@@ -142,10 +142,6 @@ class Game():
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
 
-    def update(self):
-        #self.all_sprites.update()
-        return
-
     #Function returns the square object we have clicked on
     def locate_square(self,pos):
         for i in range(8):
@@ -205,58 +201,80 @@ class Game():
 
         return illegal
 
+    def is_in_check(self,square):
+        check = False
+
+        if self.turn == 'w':
+            king_square= self.black_king_square
+        elif self.turn == 'b':
+            king_square = self.white_king_square
+
+        legal_moves = square.occupying_piece.legalMoves(self,square, king_square)
+
+        for moves in legal_moves:
+            if moves[0] == king_square.row and moves[1] == king_square.column:
+                #Here we found that this piece can see a king
+                check = True
+
+        return check
+
     #Working on this logic
     def is_checkmate(self, square):
+        checkmate = False
+        #Confirm if the last square caused a check
+        check = self.is_in_check(square)
+        print (f'Is in check? {check}')
 
-        if self.turn == 'b':
-            king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
-        elif self.turn == 'w':
-            king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
-
-        checkmate = True
-        legal_moves = []
-        #king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
-
-        if square.occupying_piece != '':
-            legal_moves = self.find_legal_moves(king_square, square)  #Get all moves the white king can make
-
-        if len(legal_moves) == 0:
-            checkmate = False
-
-        print(f'The checkmate moves are {legal_moves}')
-
-        for move in legal_moves:
-            #for each move, move the king and see if its legal
-
-            backup_king_square = king_square
-            backup_king_piece = king_square.occupying_piece
-
-            temp_square = self.squaregrid[move[0]][move[1]]
-            temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-
-            #Move the king and update the previous square to blank
-            self.squaregrid[move[0]][move[1]].occupying_piece = king_square.occupying_piece
-            self.squaregrid[king_square.row][king_square.column].occupying_piece = ''
+        if check:
 
             if self.turn == 'b':
-                self.white_king_square = self.squaregrid[move[0]][move[1]]
+                king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
             elif self.turn == 'w':
-                self.black_king_square = self.squaregrid[move[0]][move[1]]
+                king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
 
-            illegal = self.find_illegal_moves(temp_square.occupying_piece)
+            checkmate = True
+            legal_moves = []
+            #king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
 
-            self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-            self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
+            if square.occupying_piece != '':
+                legal_moves = self.find_legal_moves(king_square, square)  #Get all moves the white king can make
 
-            if self.turn == 'b':
-                self.white_king_square = backup_king_square
-            elif self.turn == 'w':
-                self.black_king_square = backup_king_square
-
-            if not illegal:
+            if len(legal_moves) == 0:
                 checkmate = False
-                print('No Checkmate found yet')
-                break
+
+            print(f'The checkmate moves are {legal_moves}')
+
+            for move in legal_moves:
+                #for each move, move the king and see if its legal
+
+                backup_king_square = king_square
+
+                temp_square = self.squaregrid[move[0]][move[1]]
+                temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+
+                #Move the king and update the previous square to blank
+                self.squaregrid[move[0]][move[1]].occupying_piece = king_square.occupying_piece
+                self.squaregrid[king_square.row][king_square.column].occupying_piece = ''
+
+                if self.turn == 'b':
+                    self.white_king_square = self.squaregrid[move[0]][move[1]]
+                elif self.turn == 'w':
+                    self.black_king_square = self.squaregrid[move[0]][move[1]]
+
+                illegal = self.find_illegal_moves(temp_square.occupying_piece)
+
+                self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+                self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
+
+                if self.turn == 'b':
+                    self.white_king_square = backup_king_square
+                elif self.turn == 'w':
+                    self.black_king_square = backup_king_square
+
+                if not illegal:
+                    checkmate = False
+                    print('No Checkmate found yet')
+                    break
 
         return checkmate
 
@@ -274,10 +292,6 @@ class Game():
                 self.selected_piece = clicked_square.occupying_piece
                 self.selected_square = clicked_square
 
-                #highlight_moves = self.find_legal_moves(self.selected_square, clicked_square)
-                #update all squares in highlight_moves array
-                #self.highlight_squares(highlight_moves)
-
         else:
             legal_moves = self.find_legal_moves(self.selected_square, clicked_square)
 
@@ -290,9 +304,6 @@ class Game():
             #This is where we make the actual moves. we want to reduce the list of legal moves first
             for move in legal_moves:
                 if move[0] == clicked_square.row and move[1] == clicked_square.column:
-
-                    #Here we matched a legal move. For this givem move, we need to see if after making it,
-                    #the game would result in a check
 
                     if (clicked_square.occupying_piece != '' and self.selected_square != clicked_square):
                         clicked_square.occupying_piece.rect.center = (-100,-100)
@@ -322,7 +333,7 @@ class Game():
 
                     print(f'Is this move illegal? {illegal}')
 
-                    if illegal:  #revert back
+                    if illegal:  #The move will be cancelled
 
                         self.toggle_turn()
                         clicked_square.occupying_piece = backup_clicked_piece
@@ -333,15 +344,15 @@ class Game():
                         if self.selected_square.occupying_piece != '':
                             self.selected_square.occupying_piece.rect.center = (backup_square.centerx, backup_square.centery)
 
-                        #Revet global king position
+                        #Revert global king position
                         if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece, King):
                             self.white_king_square = backup_square
 
                         elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                             self.black_king_square = backup_square
-                    else:
-                        #check for checkmate
+                    else:  #Move valid and occured
 
+                        #check for checkmate
                         check_mate = self.is_checkmate(clicked_square)
 
                         if check_mate:
@@ -352,6 +363,7 @@ class Game():
 
                             print(f'the highlight list is {highlight_list}')
                             self.highlight_squares(highlight_list)
+                            #pygame.quit()
 
                     self.selected_piece = None
                     self.selected_square = None
@@ -379,10 +391,6 @@ class Game():
 
             # Fill the background with white
             screen.fill((255, 255, 255))
-
-            # Draw a solid blue circle in the center
-
-            self.update()
 
             #This will mark the player grid of squares
             self.draw()
