@@ -41,7 +41,8 @@ class King(Piece):
                     new_pos[0] >= 0 and
                     new_pos[1] < 8 and
                     new_pos[1] >= 0
-            and ((toSquare.occupying_piece != '' and toSquare.occupying_piece.color != self.color) or toSquare.occupying_piece == '')):
+            and ((game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece != '' and game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece.color != self.color) or game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece == '')):
+
                 legalMoves.append(new_pos)
 
         return legalMoves
