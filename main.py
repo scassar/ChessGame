@@ -208,88 +208,55 @@ class Game():
     #Working on this logic
     def is_checkmate(self, square):
 
-        #Loop through for each king and check if all moves are illegal
-        checkmate = False
-        print(f'the white king is now at {self.white_king_square.row}, {self.white_king_square.column}')
-        print(f'the white king piece now at {self.white_king_square.occupying_piece}')
-
-        if self.turn == 'b':  #Do this if the last piece moved was black
-
-            checkmate = True
-            legal_moves = []
+        if self.turn == 'b':
             king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
-
-            if square.occupying_piece != '':
-                legal_moves = self.find_legal_moves(king_square, square)  #Get all moves the white king can make
-
-            if len(legal_moves) == 0:
-                checkmate = False
-
-            for move in legal_moves:
-                #for each move, move the king and see if its legal
-
-                backup_king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
-                backup_king_piece = self.squaregrid[self.white_king_square.row][self.white_king_square.column].occupying_piece
-
-                temp_square = self.squaregrid[move[0]][move[1]]
-                temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-
-
-                #Move the king and update the previous square to blank
-                self.squaregrid[move[0]][move[1]].occupying_piece = self.white_king_square.occupying_piece
-                self.squaregrid[self.white_king_square.row][self.white_king_square.column].occupying_piece = ''
-                self.white_king_square = self.squaregrid[move[0]][move[1]]
-
-
-                illegal = self.find_illegal_moves(self.white_king_square.occupying_piece)
-
-
-
-                #revert back move now
-                #self.squaregrid[move[0]][move[1]].occupying_piece = temp_square.occupying_piece
-
-
-                self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-                self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
-                self.white_king_square = backup_king_square
-
-                if not illegal:
-                    checkmate = False
-                    print('No Checkmate found yet')
-                    break
-        elif self.turn == 'w':  #Do this if the last piece moved was black
-
-            checkmate = True
-            legal_moves = []
-
+        elif self.turn == 'w':
             king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
 
-            if square.occupying_piece != '':
-                legal_moves = self.find_legal_moves(king_square, square)
+        checkmate = True
+        legal_moves = []
+        #king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
 
-            if len(legal_moves) == 0:
-                checkmate = False
+        if square.occupying_piece != '':
+            legal_moves = self.find_legal_moves(king_square, square)  #Get all moves the white king can make
 
-            for move in legal_moves:
+        if len(legal_moves) == 0:
+            checkmate = False
 
-                backup_king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
-                temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+        print(f'The checkmate moves are {legal_moves}')
 
+        for move in legal_moves:
+            #for each move, move the king and see if its legal
 
-                #Move the king and update the previous square to blank
-                self.squaregrid[move[0]][move[1]].occupying_piece = self.black_king_square.occupying_piece
-                self.squaregrid[self.black_king_square.row][self.black_king_square.column].occupying_piece = ''
+            backup_king_square = king_square
+            backup_king_piece = king_square.occupying_piece
+
+            temp_square = self.squaregrid[move[0]][move[1]]
+            temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+
+            #Move the king and update the previous square to blank
+            self.squaregrid[move[0]][move[1]].occupying_piece = king_square.occupying_piece
+            self.squaregrid[king_square.row][king_square.column].occupying_piece = ''
+
+            if self.turn == 'b':
+                self.white_king_square = self.squaregrid[move[0]][move[1]]
+            elif self.turn == 'w':
                 self.black_king_square = self.squaregrid[move[0]][move[1]]
 
-                illegal = self.find_illegal_moves(self.black_king_square.occupying_piece)
+            illegal = self.find_illegal_moves(temp_square.occupying_piece)
 
-                self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-                self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
+            self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+            self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
+
+            if self.turn == 'b':
+                self.white_king_square = backup_king_square
+            elif self.turn == 'w':
                 self.black_king_square = backup_king_square
 
-                if not illegal:
-                    checkmate = False
-                    break
+            if not illegal:
+                checkmate = False
+                print('No Checkmate found yet')
+                break
 
         return checkmate
 
@@ -381,7 +348,7 @@ class Game():
                             if self.turn == 'w':
                                 highlight_list = [[self.black_king_square.row,self.black_king_square.column]]
                             else:
-                                highlight_list = [[self.black_king_square.row, self.black_king_square.column]]
+                                highlight_list = [[self.white_king_square.row, self.white_king_square.column]]
 
                             print(f'the highlight list is {highlight_list}')
                             self.highlight_squares(highlight_list)
