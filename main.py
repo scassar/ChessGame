@@ -23,7 +23,7 @@ class Game():
         self.game_over = False
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.turn = 'w'
-        # representation of the current board / board start
+        #representation of the current board / board start
         self.board = [
             ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
             ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
@@ -36,21 +36,20 @@ class Game():
         ]
 
         # self.board = [
-        #     ['--', '--', '--', '--', 'bK', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['wR', 'wR', '--', '--', 'wK', '--', '--', '--'],
-        # ]
+        #      ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+        #      ['bP', 'bP', 'bP', 'bP', '--', 'bP', 'bP', 'bP'],
+        #      ['--', '--', '--', '--', '--', '--', '--', '--'],
+        #      ['--', '--', '--', '--', '--', '--', '--', '--'],
+        #      ['--', '--', '--', '--', '--', '--', '--', '--'],
+        #      ['--', '--', '--', '--', '--', '--', '--', '--'],
+        #      ['wP', 'wP', 'wP', 'wP', '--', 'wP', 'wP', 'wP'],
+        #      ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
+        #  ]
 
         self.squaregrid = [[], [], [], [], [], [], [], []]
 
         self.create_board()
         self.create_pieces()
-
         self.running()
 
     def toggle_turn(self):
@@ -100,7 +99,6 @@ class Game():
                     elif colour == 'b' and piece_code == 'K':
                         self.black_king_square = self.squaregrid[x][y]
                         #print(f'Black king is at location {x} {y}')
-
 
     def determine_piece(self, piece):
         #This function will return back what piece object based on the letters in the board array for setup
@@ -154,7 +152,6 @@ class Game():
 
         legal_moves = fromSquare.occupying_piece.legalMoves(self,fromSquare)
 
-        print(f'the legal moves are  {legal_moves}')
         return legal_moves #Array list of row,columns that can be used
 
     def highlight_squares(self,highlight_list):
@@ -223,62 +220,58 @@ class Game():
         checkmate = False
         #Confirm if the last square caused a check
         check = self.is_in_check(square)
-        print (f'Is in check? {check}')
 
-        if check:
-
+        if check: #The king that is currently check is king_square
             if self.turn == 'b':
                 king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
             elif self.turn == 'w':
                 king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
 
             checkmate = True
-            legal_moves = []
 
-            if square.occupying_piece != '':
-                #Here we need to get a list of all legal moves
+                #So far we are just checking to see if the king has any moves. It will try all king moves and if atleast 1 is legal, we wont checkmate. If the king cant move then its checkmate.
+                #What we need to do is loop through all pieces on the team in check, and see if any of them is not illegal. This means its not check yet.
 
-                legal_moves = self.find_legal_moves(king_square)
-                #legal_moves = self.check_all_moves_opp_color(king_square)
+            for x in range(8):
+                for y in range(8):
 
-            if len(legal_moves) == 0:
-                checkmate = False
+                    if (self.squaregrid[x][y].occupying_piece != '' and self.squaregrid[x][y].occupying_piece.color == king_square.occupying_piece.color and checkmate == True):  # Loop all pieces on the black team
+                        legal_moves = self.squaregrid[x][y].occupying_piece.legalMoves(self,self.squaregrid[x][y])
 
-            print(f'The checkmate moves are {legal_moves}')
+                        selected_square = self.squaregrid[x][y]
+                        selected_piece = self.squaregrid[x][y].occupying_piece
 
-            for move in legal_moves:
+                        for move in legal_moves:
+                            #for each move, see if the result is not illegal. If we find a single move that blocks the check, no checkmate
 
-                #for each move, see if the result is not illegal. If we find a single move that blocks the check, no checkmate
+                            backup_king_square = king_square
+                            temp_square = self.squaregrid[move[0]][move[1]]
+                            temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+                            back_current_piece = selected_piece
 
-                backup_king_square = king_square
-                temp_square = self.squaregrid[move[0]][move[1]]
-                temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
+                            if selected_piece.color == 'w' and isinstance(selected_piece,King):
+                                self.white_king_square = self.squaregrid[move[0]][move[1]]
+                            elif selected_piece.color == 'b' and isinstance(selected_piece,King):
+                                self.black_king_square = self.squaregrid[move[0]][move[1]]
 
-                #Move the king and update the previous square to blank
-                self.squaregrid[move[0]][move[1]].occupying_piece = king_square.occupying_piece
-                self.squaregrid[king_square.row][king_square.column].occupying_piece = ''
+                            #Move the piece and update the previous square to blank
+                            self.squaregrid[move[0]][move[1]].occupying_piece = selected_square.occupying_piece
+                            self.squaregrid[selected_square.row][selected_square.column].occupying_piece = ''
 
-                if self.turn == 'b':
-                    self.white_king_square = self.squaregrid[move[0]][move[1]]
-                elif self.turn == 'w':
-                    self.black_king_square = self.squaregrid[move[0]][move[1]]
+                            illegal = self.find_illegal_moves(temp_square.occupying_piece)
 
-                print(f'occupyingpiece = {temp_square.occupying_piece}')
+                            self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
+                            self.squaregrid[selected_square.row][selected_square.column].occupying_piece = back_current_piece
 
-                illegal = self.find_illegal_moves(temp_square.occupying_piece)
+                            if selected_square.occupying_piece.color == 'w' and isinstance(selected_square.occupying_piece,King):
+                                self.white_king_square = backup_king_square
+                            elif selected_square.occupying_piece.color == 'b' and isinstance(selected_square.occupying_piece,King):
+                                self.black_king_square = backup_king_square
 
-                self.squaregrid[backup_king_square.row][backup_king_square.column].occupying_piece = self.squaregrid[move[0]][move[1]].occupying_piece
-                self.squaregrid[move[0]][move[1]].occupying_piece = temp_square_piece
-
-                if self.turn == 'b':
-                    self.white_king_square = backup_king_square
-                elif self.turn == 'w':
-                    self.black_king_square = backup_king_square
-
-                if not illegal:
-                    checkmate = False
-                    print('No Checkmate found yet')
-                    break
+                            if not illegal:
+                                checkmate = False
+                                print('No Checkmate found yet')
+                                break
 
         return checkmate
 
@@ -335,8 +328,6 @@ class Game():
 
                     illegal = self.find_illegal_moves(backup_piece)
 
-                    print(f'Is this move illegal? {illegal}')
-
                     if illegal:  #The move will be cancelled
 
                         self.toggle_turn()
@@ -365,7 +356,6 @@ class Game():
                             else:
                                 highlight_list = [[self.white_king_square.row, self.white_king_square.column]]
 
-                            print(f'the highlight list is {highlight_list}')
                             self.highlight_squares(highlight_list)
                             print("CHECK MATE!")
                             #pygame.quit()
