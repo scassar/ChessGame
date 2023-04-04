@@ -203,6 +203,7 @@ class Game():
 
         if self.turn == 'w':
             king_square = self.black_king_square
+
         elif self.turn == 'b':
             king_square = self.white_king_square
 
@@ -222,11 +223,14 @@ class Game():
         check = self.is_in_check(square)
 
         if check: #The king that is currently check is king_square
+
+
             if self.turn == 'b':
                 king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
             elif self.turn == 'w':
                 king_square = self.squaregrid[self.black_king_square.row][self.black_king_square.column]
 
+            self.highlight_squares([[king_square.row, king_square.column]])
             checkmate = True
 
                 #So far we are just checking to see if the king has any moves. It will try all king moves and if atleast 1 is legal, we wont checkmate. If the king cant move then its checkmate.
@@ -319,6 +323,8 @@ class Game():
                         clicked_square.occupying_piece.rect.center = (-100,-100)
 
                 #Check for legal move. What we need to know here is the from square, peice and target square
+                    self.white_king_square.highlighted = False
+                    self.black_king_square.highlighted = False
 
                     if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece,King):
                         self.white_king_square = clicked_square
@@ -359,6 +365,7 @@ class Game():
                         elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                             self.black_king_square = backup_square
                     else:  #Move valid and occured
+
 
                         self.check_promotion(clicked_square)
 

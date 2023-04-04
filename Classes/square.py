@@ -41,9 +41,15 @@ class Square():
     def drawSquare(self, screen):
         if self.highlighted:
             if self.color == BLACK:
-                pygame.draw.rect(screen, (17,102,68), self.rect, 0)
+                if self.occupying_piece != '' and isinstance(self.occupying_piece,King):
+                    pygame.draw.rect(screen, (236,26,26), self.rect, 0)
+                else:
+                    pygame.draw.rect(screen, (17,102,68), self.rect, 0)
             else:
-                pygame.draw.rect(screen, (85,153,119), self.rect, 0)
+                if self.occupying_piece != '' and isinstance(self.occupying_piece, King):
+                    pygame.draw.rect(screen, (238,91,91), self.rect, 0)
+                else:
+                    pygame.draw.rect(screen, (85,153,119), self.rect, 0)
         else:
             pygame.draw.rect(screen, self.color, self.rect, 0)
 
