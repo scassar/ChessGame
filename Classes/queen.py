@@ -106,15 +106,3 @@ class Queen(Piece):
         final_moves = list(move_filter)
 
         return final_moves
-
-
-
-
-
-
-
-
-
-
-
-        return legalMoves

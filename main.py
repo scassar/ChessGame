@@ -150,13 +150,12 @@ class Game():
                         return self.squaregrid[i][z]
 
     #This must return an array of square objects that are legal objects to move
-    def find_legal_moves(self, fromSquare, toSquare):
+    def find_legal_moves(self, fromSquare):
 
         legal_moves = fromSquare.occupying_piece.legalMoves(self,fromSquare)
 
         print(f'the legal moves are  {legal_moves}')
         return legal_moves #Array list of row,columns that can be used
-
 
     def highlight_squares(self,highlight_list):
         for x in highlight_list:
@@ -167,24 +166,28 @@ class Game():
             else:
                 self.squaregrid[row][column].highlighted = True
 
-    def find_illegal_moves(self, piece):
-        #Return if after making a move there is someone who can see the king.
-        #Piece passed in is the selected one
+    #Returns entire list of moves from the opposite team
+    def check_all_moves_opp_color(self, color):
+
         legal_moves = []
         legal_moves_temp=[]
 
         for x in range(8):
             for y in range(8):
-                if (self.squaregrid[x][y].occupying_piece != '' and self.squaregrid[x][y].occupying_piece.color != piece.color): #Get the opposite color. We check the square against passed color and want a different value
-                    if piece.color == 'w':
+                if (self.squaregrid[x][y].occupying_piece != '' and self.squaregrid[x][y].occupying_piece.color != color): #Get the opposite color. We check the square against passed color and want a different value
+                    if color == 'w':
                         legal_moves_temp = self.squaregrid[x][y].occupying_piece.legalMoves(self, self.squaregrid[x][y])
-
                     else:
                         legal_moves_temp = self.squaregrid[x][y].occupying_piece.legalMoves(self, self.squaregrid[x][y])
 
                 legal_moves = legal_moves + legal_moves_temp
 
-        #check if the king is now a target from the other teams moves.
+        return legal_moves
+
+    #Function returns whether or not a move is illegal
+    def find_illegal_moves(self, piece):
+
+        legal_moves = self.check_all_moves_opp_color(piece.color)
 
         illegal = False
 
@@ -192,7 +195,6 @@ class Game():
             if piece.color == 'w':
                 if move[0] == self.white_king_square.row and move[1] == self.white_king_square.column:
                     illegal = True
-
             else:
                 if move[0] == self.black_king_square.row and move[1] == self.black_king_square.column:
                     illegal = True
@@ -203,15 +205,14 @@ class Game():
         check = False
 
         if self.turn == 'w':
-            king_square= self.black_king_square
+            king_square = self.black_king_square
         elif self.turn == 'b':
             king_square = self.white_king_square
 
-        legal_moves = square.occupying_piece.legalMoves(self,square)
+        legal_moves = self.find_legal_moves(square)
 
         for moves in legal_moves:
             if moves[0] == king_square.row and moves[1] == king_square.column:
-                #Here we found that this piece can see a king
                 check = True
 
         return check
@@ -233,10 +234,12 @@ class Game():
 
             checkmate = True
             legal_moves = []
-            #king_square = self.squaregrid[self.white_king_square.row][self.white_king_square.column]
 
             if square.occupying_piece != '':
-                legal_moves = self.find_legal_moves(king_square, square)  #Get all moves the white king can make
+                #Here we need to get a list of all legal moves
+
+                legal_moves = self.find_legal_moves(king_square)
+                #legal_moves = self.check_all_moves_opp_color(king_square)
 
             if len(legal_moves) == 0:
                 checkmate = False
@@ -244,10 +247,10 @@ class Game():
             print(f'The checkmate moves are {legal_moves}')
 
             for move in legal_moves:
-                #for each move, move the king and see if its legal
+
+                #for each move, see if the result is not illegal. If we find a single move that blocks the check, no checkmate
 
                 backup_king_square = king_square
-
                 temp_square = self.squaregrid[move[0]][move[1]]
                 temp_square_piece = self.squaregrid[move[0]][move[1]].occupying_piece
 
@@ -259,6 +262,8 @@ class Game():
                     self.white_king_square = self.squaregrid[move[0]][move[1]]
                 elif self.turn == 'w':
                     self.black_king_square = self.squaregrid[move[0]][move[1]]
+
+                print(f'occupyingpiece = {temp_square.occupying_piece}')
 
                 illegal = self.find_illegal_moves(temp_square.occupying_piece)
 
@@ -292,7 +297,7 @@ class Game():
                 self.selected_square = clicked_square
 
         else:
-            legal_moves = self.find_legal_moves(self.selected_square, clicked_square)
+            legal_moves = self.find_legal_moves(self.selected_square)
 
             #highlight_moves = legal_moves
 
@@ -351,7 +356,7 @@ class Game():
                             self.black_king_square = backup_square
                     else:  #Move valid and occured
 
-                        #check for checkmate
+                        #check for checkmate. Pass in the square location of where the last piece moved to. Return True/False
                         check_mate = self.is_checkmate(clicked_square)
 
                         if check_mate:
@@ -362,6 +367,7 @@ class Game():
 
                             print(f'the highlight list is {highlight_list}')
                             self.highlight_squares(highlight_list)
+                            print("CHECK MATE!")
                             #pygame.quit()
 
                     self.selected_piece = None

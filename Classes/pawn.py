@@ -52,8 +52,6 @@ class Pawn(Piece):
                 if game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece.color == 'w':
                     legalMoves.append([fromSquare.row+1, fromSquare.column-1])
 
-        print(f'pawn moves {legalMoves}')
-
         return legalMoves
 
 
