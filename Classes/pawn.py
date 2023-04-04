@@ -18,32 +18,41 @@ class Pawn(Piece):
     def update(self):
         print()
 
-    def legalMoves(self,game,fromSquare,toSquare):
+    def legalMoves(self,game,fromSquare):
 
         legalMoves = []
 
         if self.color == 'w':
-
-            if (toSquare.occupying_piece == ''):
+            if (game.squaregrid[fromSquare.row - 1][fromSquare.column].occupying_piece == ''):
                 legalMoves.append([fromSquare.row - 1, fromSquare.column])
 
-            if (fromSquare.row == 6 and toSquare.occupying_piece == ''):
+            if (game.squaregrid[fromSquare.row - 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 6):
                 legalMoves.append([fromSquare.row - 2, fromSquare.column])
 
-            if toSquare.row == fromSquare.row - 1 and abs(
-                    toSquare.column - fromSquare.column) == 1 and toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'b':
-                legalMoves.append([toSquare.row, toSquare.column])
+            if fromSquare.column+1 < 8 and fromSquare.row -1 >= 0:
+                if game.squaregrid[fromSquare.row-1][fromSquare.column+1].occupying_piece != '' and game.squaregrid[fromSquare.row-1][fromSquare.column+1].occupying_piece.color == 'b':
+                    legalMoves.append([fromSquare.row-1, fromSquare.column+1])
+
+            if fromSquare.column-1 >= 0 and fromSquare.row -1 >= 0:
+                if game.squaregrid[fromSquare.row-1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row-1][fromSquare.column-1].occupying_piece.color == 'b':
+                    legalMoves.append([fromSquare.row-1, fromSquare.column-1])
 
         else:
-            if (toSquare.occupying_piece == ''):
+            if (game.squaregrid[fromSquare.row + 1][fromSquare.column].occupying_piece == ''):
                 legalMoves.append([fromSquare.row + 1, fromSquare.column])
 
-            if (fromSquare.row == 1 and toSquare.occupying_piece == ''):
+            if (game.squaregrid[fromSquare.row + 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 1):
                 legalMoves.append([fromSquare.row + 2, fromSquare.column])
 
-            if toSquare.row == fromSquare.row + 1 and abs(
-                    toSquare.column - fromSquare.column) == 1 and toSquare.occupying_piece != '' and toSquare.occupying_piece.color == 'w':
-                legalMoves.append([toSquare.row, toSquare.column])
+            if fromSquare.column+1 < 8 and fromSquare.row +1 >= 0:
+                if game.squaregrid[fromSquare.row+1][fromSquare.column+1].occupying_piece != '' and game.squaregrid[fromSquare.row+1][fromSquare.column+1].occupying_piece.color == 'w':
+                    legalMoves.append([fromSquare.row+1, fromSquare.column+1])
+
+            if fromSquare.column-1 >= 0 and fromSquare.row +1 >= 0:
+                if game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece.color == 'w':
+                    legalMoves.append([fromSquare.row+1, fromSquare.column-1])
+
+        print(f'pawn moves {legalMoves}')
 
         return legalMoves
 

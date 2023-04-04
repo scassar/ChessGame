@@ -18,7 +18,7 @@ class King(Piece):
     def update(self):
         print()
 
-    def legalMoves(self,game,fromSquare,toSquare):
+    def legalMoves(self,game,fromSquare):
         #print("we are checking moves for a King")
         legalMoves = []
 

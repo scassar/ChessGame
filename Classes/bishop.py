@@ -16,7 +16,7 @@ class Bishop(Piece):
         self.rect.center = (self.x,self.y)
 
     #return array of legal moves
-    def legalMoves(self,game,fromSquare,toSquare):
+    def legalMoves(self,game,fromSquare):
 
         #print("we are checking moves for a Bishop")
         legalMoves = []
@@ -26,7 +26,8 @@ class Bishop(Piece):
             if fromSquare.row + i > 7 or fromSquare.column - i < 0:
                 break
             if game.squaregrid[fromSquare.row + i][fromSquare.column - i].occupying_piece != '':
-                legalMoves.append([fromSquare.row + i, fromSquare.column - i])
+                if game.squaregrid[fromSquare.row + i][fromSquare.column - i].occupying_piece.color != self.color:
+                    legalMoves.append([fromSquare.row + i, fromSquare.column - i])
                 break
             legalMoves.append([fromSquare.row + i, fromSquare.column - i])
 
@@ -34,7 +35,8 @@ class Bishop(Piece):
             if fromSquare.row + i > 7 or fromSquare.column + i > 7:
                 break
             if game.squaregrid[fromSquare.row + i][fromSquare.column + i].occupying_piece != '':
-                legalMoves.append([fromSquare.row + i, fromSquare.column + i])
+                if game.squaregrid[fromSquare.row + i][fromSquare.column + i].occupying_piece.color != self.color:
+                    legalMoves.append([fromSquare.row + i, fromSquare.column + i])
                 break
             legalMoves.append([fromSquare.row + i, fromSquare.column + i])
 
@@ -42,7 +44,8 @@ class Bishop(Piece):
             if fromSquare.row - i < 0 or fromSquare.column + i > 7:
                 break
             if game.squaregrid[fromSquare.row - i][fromSquare.column + i].occupying_piece != '':
-                legalMoves.append([fromSquare.row - i, fromSquare.column + i])
+                if game.squaregrid[fromSquare.row - i][fromSquare.column + i].occupying_piece.color != self.color:
+                    legalMoves.append([fromSquare.row - i, fromSquare.column + i])
                 break
             legalMoves.append([fromSquare.row - i, fromSquare.column + i])
 
@@ -50,18 +53,10 @@ class Bishop(Piece):
             if fromSquare.row - i < 0 or fromSquare.column - i < 0:
                 break
             if game.squaregrid[fromSquare.row - i][fromSquare.column - i].occupying_piece != '':
-                legalMoves.append([fromSquare.row - i, fromSquare.column - i])
+                if game.squaregrid[fromSquare.row - i][fromSquare.column - i].occupying_piece.color != self.color:
+                    legalMoves.append([fromSquare.row - i, fromSquare.column - i])
                 break
             legalMoves.append([fromSquare.row - i, fromSquare.column - i])
-
-        invalid_move = True
-        for moves in legalMoves:
-            if moves[0] == toSquare.row and moves[1] == toSquare.column:
-                invalid_move = False
-                break
-
-        if invalid_move or (toSquare.occupying_piece != '' and toSquare.occupying_piece.color == self.color):
-            legalMoves=[]
 
         return legalMoves
 

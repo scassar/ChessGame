@@ -21,7 +21,7 @@ class Knight(Piece):
         print()
 
 
-    def legalMoves(self,game,fromSquare,toSquare):
+    def legalMoves(self,game,fromSquare):
         legalMoves = []
 
         moves = [
@@ -43,7 +43,7 @@ class Knight(Piece):
                     new_pos[0] >= 0 and
                     new_pos[1] < 8 and
                     new_pos[1] >= 0
-            and ((toSquare.occupying_piece != '' and toSquare.occupying_piece.color != self.color) or toSquare.occupying_piece == '')):
+            and ((game.squaregrid[new_pos[0]][new_pos[1]].occupying_piece != '' and game.squaregrid[new_pos[0]][new_pos[1]].occupying_piece.color != self.color) or game.squaregrid[new_pos[0]][new_pos[1]].occupying_piece == '')):
                 legalMoves.append(new_pos)
 
         return legalMoves
