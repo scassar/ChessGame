@@ -279,7 +279,6 @@ class Game():
         return checkmate
 
     def check_promotion(self,square):
-        print('Checking promotion')
         if isinstance(square.occupying_piece,Pawn) and square.occupying_piece.color == 'w' and square.row == 0:
             square.occupying_piece.kill()
             square.addPiece(self,'w','Q')

@@ -23,7 +23,6 @@ class Pawn(Piece):
         legalMoves = []
 
         if self.color == 'w':
-            print(f'checking position of {fromSquare.row}')
 
             if (game.squaregrid[fromSquare.row - 1][fromSquare.column].occupying_piece == ''):
                 legalMoves.append([fromSquare.row - 1, fromSquare.column])
@@ -41,7 +40,6 @@ class Pawn(Piece):
                     legalMoves.append([fromSquare.row-1, fromSquare.column-1])
 
         else:
-            print(f'checking position of {fromSquare.row}')
 
             if (game.squaregrid[fromSquare.row + 1][fromSquare.column].occupying_piece == ''):
                 legalMoves.append([fromSquare.row + 1, fromSquare.column])
