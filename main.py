@@ -378,9 +378,7 @@ class Game():
                             else:
                                 highlight_list = [[self.white_king_square.row, self.white_king_square.column]]
 
-                            self.highlight_squares(highlight_list)
                             print("CHECK MATE!")
-                            #pygame.quit()
 
                     self.selected_piece = None
                     self.selected_square = None
