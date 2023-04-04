@@ -272,9 +272,17 @@ class Game():
                                 checkmate = False
                                 print('No Checkmate found yet')
                                 break
-
         return checkmate
 
+    def check_promotion(self,square):
+        print('Checking promotion')
+        if isinstance(square.occupying_piece,Pawn) and square.occupying_piece.color == 'w' and square.row == 0:
+            square.occupying_piece.kill()
+            square.addPiece(self,'w','Q')
+
+        elif isinstance(square.occupying_piece,Pawn) and square.occupying_piece.color == 'b' and square.row == 7:
+            square.occupying_piece.kill()
+            square.addPiece(self, 'b', 'Q')
 
     def handle_click(self,pos):
         clicked_square = self.locate_square(pos)
@@ -289,7 +297,12 @@ class Game():
                 self.selected_piece = clicked_square.occupying_piece
                 self.selected_square = clicked_square
 
+                legal_moves = self.find_legal_moves(self.selected_square)
+                self.highlight_squares(legal_moves)
+
         else:
+            legal_moves = self.find_legal_moves(self.selected_square)
+            self.highlight_squares(legal_moves)
             legal_moves = self.find_legal_moves(self.selected_square)
 
             #highlight_moves = legal_moves
@@ -346,6 +359,8 @@ class Game():
                         elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                             self.black_king_square = backup_square
                     else:  #Move valid and occured
+
+                        self.check_promotion(clicked_square)
 
                         #check for checkmate. Pass in the square location of where the last piece moved to. Return True/False
                         check_mate = self.is_checkmate(clicked_square)
