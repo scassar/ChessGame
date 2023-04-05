@@ -20,6 +20,7 @@ class Piece(pygame.sprite.Sprite):
         self.x = x
         self.y=y
         self.pos = vec()
+        self.move_count = 0
 
         #Call to the super class init function. What does this do?
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -27,7 +28,8 @@ class Piece(pygame.sprite.Sprite):
     def update(self):
         print()
 
-
+    def move(self):
+        self.move_count = self.move_count + 1
 
     def returnSelected(self,x,y):
         return

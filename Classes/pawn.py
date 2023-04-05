@@ -39,6 +39,15 @@ class Pawn(Piece):
                 if game.squaregrid[fromSquare.row-1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row-1][fromSquare.column-1].occupying_piece.color == 'b':
                     legalMoves.append([fromSquare.row-1, fromSquare.column-1])
 
+            #En Passant Legal move
+            if fromSquare.column+1 < 8:
+                if game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece != '' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.color == 'b' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.move_count == 1 and game.squaregrid[fromSquare.row][fromSquare.column+1].row == 3:
+                    legalMoves.append([fromSquare.row-1, fromSquare.column + 1])
+
+            if fromSquare.column-1 > 0:
+                if game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece.color == 'b' and game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece.move_count == 1 and game.squaregrid[fromSquare.row][fromSquare.column-1].row == 3:
+                    legalMoves.append([fromSquare.row-1, fromSquare.column - 1])
+
         else:
 
             if (game.squaregrid[fromSquare.row + 1][fromSquare.column].occupying_piece == ''):
@@ -55,6 +64,14 @@ class Pawn(Piece):
             if fromSquare.column-1 >= 0 and fromSquare.row + 1 >= 0:
                 if game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece.color == 'w':
                     legalMoves.append([fromSquare.row+1, fromSquare.column-1])
+
+            if fromSquare.column+1 < 8:
+                if game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece != '' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.color == 'w' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.move_count == 1 and game.squaregrid[fromSquare.row][fromSquare.column+1].row == 4:
+                    legalMoves.append([fromSquare.row+1, fromSquare.column + 1])
+
+            if fromSquare.column-1 > 0:
+                if game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece.color == 'w' and game.squaregrid[fromSquare.row][fromSquare.column-1].occupying_piece.move_count == 1 and game.squaregrid[fromSquare.row][fromSquare.column-1].row == 4:
+                    legalMoves.append([fromSquare.row+1, fromSquare.column - 1])
 
         return legalMoves
 

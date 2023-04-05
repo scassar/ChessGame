@@ -333,6 +333,7 @@ class Game():
                 #Check for legal move. What we need to know here is the from square, peice and target square
                     self.white_king_square.highlighted = False
                     self.black_king_square.highlighted = False
+                    en_passant_square = None
 
                     if self.selected_square.occupying_piece.color == 'w' and isinstance(self.selected_square.occupying_piece,King):
                         self.white_king_square = clicked_square
@@ -344,6 +345,13 @@ class Game():
                     backup_square = self.selected_square
                     backup_clicked_square = clicked_square
                     backup_clicked_piece = clicked_square.occupying_piece
+
+
+                    if (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece.color == 'b'):
+                        en_passant_square = self.squaregrid[clicked_square.row+1][clicked_square.column]
+
+                    elif (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece.color == 'w'):
+                        en_passant_square = self.squaregrid[clicked_square.row -1][clicked_square.column]
 
                     # Set the new square = to the selected square and update the piece.
                     clicked_square.occupying_piece = self.selected_piece
@@ -357,6 +365,7 @@ class Game():
 
                     if illegal:  #The move will be cancelled
 
+                        en_passant_square = None
                         self.toggle_turn()
                         clicked_square.occupying_piece = backup_clicked_piece
                         if clicked_square.occupying_piece != '':
@@ -372,10 +381,16 @@ class Game():
 
                         elif self.selected_square.color == 'b' and isinstance(self.selected_square.occupying_piece,King):
                             self.black_king_square = backup_square
+
                     else:  #Move valid and occured
 
-
+                        self.selected_piece.move()
                         self.check_promotion(clicked_square)
+
+                        if en_passant_square is not None:
+                            en_passant_square.occupying_piece.rect.center = (-100, -100)
+                            en_passant_square.occupying_piece = ''
+
 
                         #check for checkmate. Pass in the square location of where the last piece moved to. Return True/False
                         check_mate = self.is_checkmate(clicked_square)
