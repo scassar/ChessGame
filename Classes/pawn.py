@@ -28,7 +28,7 @@ class Pawn(Piece):
                 legalMoves.append([fromSquare.row - 1, fromSquare.column])
 
             if fromSquare.row == 6:
-                if (game.squaregrid[fromSquare.row - 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 6):
+                if (game.squaregrid[fromSquare.row - 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 6 and game.squaregrid[fromSquare.row - 1][fromSquare.column].occupying_piece == ''):
                     legalMoves.append([fromSquare.row - 2, fromSquare.column])
 
             if fromSquare.column+1 < 8 and fromSquare.row -1 >= 0:
@@ -45,7 +45,7 @@ class Pawn(Piece):
                 legalMoves.append([fromSquare.row + 1, fromSquare.column])
 
             if fromSquare.row == 1:
-                if (game.squaregrid[fromSquare.row + 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 1):
+                if (game.squaregrid[fromSquare.row + 2][fromSquare.column].occupying_piece == '' and fromSquare.row == 1 and game.squaregrid[fromSquare.row + 1][fromSquare.column].occupying_piece == ''):
                     legalMoves.append([fromSquare.row + 2, fromSquare.column])
 
             if fromSquare.column+1 < 8 and fromSquare.row +1 >= 0:

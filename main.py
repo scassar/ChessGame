@@ -294,6 +294,14 @@ class Game():
             print("Not a selectable square")
             return
 
+        #Handle return if the same square is selected.
+        if self.selected_square == clicked_square:
+            self.highlight_squares(self.selected_piece.legalMoves(self,self.selected_square))
+            self.selected_piece = None
+            self.selected_square = None
+            return
+
+
         #Enter this loop when selecting a piece. Select the square and piece we want to target first.
         if self.selected_piece is None:
             if (clicked_square.occupying_piece != '' and clicked_square.occupying_piece.color == self.turn):
@@ -304,6 +312,7 @@ class Game():
                 self.highlight_squares(legal_moves)
 
         else:
+
             legal_moves = self.find_legal_moves(self.selected_square)
             self.highlight_squares(legal_moves)
             legal_moves = self.find_legal_moves(self.selected_square)
