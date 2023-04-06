@@ -346,12 +346,13 @@ class Game():
                     backup_clicked_square = clicked_square
                     backup_clicked_piece = clicked_square.occupying_piece
 
-
-                    if (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece.color == 'b'):
-                        en_passant_square = self.squaregrid[clicked_square.row+1][clicked_square.column]
-
-                    elif (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece.color == 'w'):
-                        en_passant_square = self.squaregrid[clicked_square.row -1][clicked_square.column]
+                    if isinstance(self.selected_square.occupying_piece,Pawn):
+                        if (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row+1][clicked_square.column].occupying_piece.color == 'b'):
+                            en_passant_square = self.squaregrid[clicked_square.row+1][clicked_square.column]
+                            print("EN PASSANT")
+                        elif (clicked_square.occupying_piece == '' and isinstance(self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece,Pawn) and self.squaregrid[clicked_square.row-1][clicked_square.column].occupying_piece.color == 'w'):
+                            en_passant_square = self.squaregrid[clicked_square.row -1][clicked_square.column]
+                            print("EN PASSANT")
 
                     # Set the new square = to the selected square and update the piece.
                     clicked_square.occupying_piece = self.selected_piece
