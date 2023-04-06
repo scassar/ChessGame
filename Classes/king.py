@@ -18,6 +18,14 @@ class King(Piece):
     def update(self):
         print()
 
+    def handle_castle(self,game,from_square,clicked_square):
+        #here we will simply check if the king can castle. Lets just implement basic castle
+        backup_rook = self.squaregrid[self.white_king_square.row][self.white_king_square.column + 3]
+        self.white_king_square = clicked_square
+        self.squaregrid[self.white_king_square.row][self.white_king_square.column + 3]
+
+        return
+
     def legalMoves(self,game,fromSquare):
         #print("we are checking moves for a King")
         legalMoves = []
@@ -44,5 +52,26 @@ class King(Piece):
             and ((game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece != '' and game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece.color != self.color) or game.squaregrid[fromSquare.row + move[0]][fromSquare.column + move[1]].occupying_piece == '')):
 
                 legalMoves.append(new_pos)
+
+        #Check for castle and add legal move if there is no blocking pieces
+
+        if self.move_count == 0:
+             print('2')
+             #Right side rook
+             if game.squaregrid[fromSquare.row][fromSquare.column+3].occupying_piece.move_count == 0:
+                print('3')
+                if game.squaregrid[fromSquare.row][fromSquare.column+2].occupying_piece == '' and game.squaregrid[fromSquare.row][fromSquare.column + 1].occupying_piece == '':
+                    #This means we can castle right
+                    print('4')
+                    legalMoves.append([fromSquare.row, fromSquare.column+2])
+
+        if game.squaregrid[fromSquare.row][fromSquare.column-4].occupying_piece.move_count == 0:
+            print('3')
+            if game.squaregrid[fromSquare.row][fromSquare.column - 3].occupying_piece == '' and \
+                game.squaregrid[fromSquare.row][fromSquare.column - 2].occupying_piece == '' and game.squaregrid[fromSquare.row][fromSquare.column - 1].occupying_piece == '':
+
+                # This means we can castle left
+                print('4')
+                legalMoves.append([fromSquare.row, fromSquare.column - 2])
 
         return legalMoves
