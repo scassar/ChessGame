@@ -12,7 +12,6 @@ class Rook(Piece):
         self.image = pygame.transform.scale(self.image, (240,240))
         #self.image = pygame.transform.scale(self.image, (70,70))
 
-        # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
@@ -24,7 +23,7 @@ class Rook(Piece):
 
         legalMoves = []
 
-        #moe north
+        #move north
 
         for y in range(fromSquare.row+1):
             if game.squaregrid[fromSquare.row - y][fromSquare.column].occupying_piece != '':
@@ -65,7 +64,7 @@ class Rook(Piece):
                     break
             legalMoves.append([fromSquare.row, fromSquare.column-y])
 
-        #Here we are just removing the own square. Can refactor later.
+        #Here we are just removing the own square move. Can refactor later.
         move_filter = filter(lambda a: (a[0] != fromSquare.row or a[1] != fromSquare.column), legalMoves)
         final_moves = list(move_filter)
 

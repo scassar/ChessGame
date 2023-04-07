@@ -20,9 +20,8 @@ class Queen(Piece):
 
     def legalMoves(self,game,fromSquare):
 
-        #print("we are checking moves for a Queen")
         legalMoves = []
-        # We need to calculate the movement for the bishop
+        # Code for the queen is the same as the rook + bishop
 
         for i in range(1, 8):
             if fromSquare.row + i > 7 or fromSquare.column - i < 0:

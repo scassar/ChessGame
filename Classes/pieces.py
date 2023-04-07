@@ -6,8 +6,9 @@ vec = pygame.math.Vector2
 
 #This enum just maps the image files to be used for a given piece on the board
 
-# Here we want the code to control the piece. By default it will be part of inheting from pygame Sprite object. You
-# want to override the rect, image and update() functions
+# Here we want the code to control the piece. By default it will be part of inheriting from pygame Sprite object. You
+# want to override the rect, image and update() functions in the subclasses
+
 class Piece(pygame.sprite.Sprite):
 
     def __init__(self, color, x,y, game):

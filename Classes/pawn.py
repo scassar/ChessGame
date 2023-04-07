@@ -9,8 +9,6 @@ class Pawn(Piece):
         #self.image = pygame.transform.scale(self.image, (70,70))
         self.image = pygame.transform.scale(self.image, (240,240))
 
-        #Determine the position now
-        # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
         self.rect.center = (self.x,self.y)
@@ -65,6 +63,7 @@ class Pawn(Piece):
                 if game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece != '' and game.squaregrid[fromSquare.row+1][fromSquare.column-1].occupying_piece.color == 'w':
                     legalMoves.append([fromSquare.row+1, fromSquare.column-1])
 
+            # En Passant Legal move
             if fromSquare.column+1 < 8:
                 if game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece != '' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.color == 'w' and game.squaregrid[fromSquare.row][fromSquare.column+1].occupying_piece.move_count == 1 and game.squaregrid[fromSquare.row][fromSquare.column+1].row == 4:
                     legalMoves.append([fromSquare.row+1, fromSquare.column + 1])
